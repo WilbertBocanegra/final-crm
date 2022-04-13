@@ -87,7 +87,7 @@
 		<Button color="primary" on:click={toggle} class="mr-3">Registrar Cliente</Button>
 		<Button color="primary" on:click={toggle2}>Registrar Organizacion</Button>
 	</div>
-	<div class="px-5 flex-row">
+	<div class="px-5 ">
 		<Dropdown class="float-left">
 			<DropdownToggle caret color="primary">Dropdown</DropdownToggle>
 			<DropdownMenu>
