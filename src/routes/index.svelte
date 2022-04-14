@@ -36,11 +36,34 @@
 		PaginationLink
 	} from 'sveltestrap';
 	import { According, Footer } from '$lib/components';
+	import { dataset_dev } from 'svelte/internal';
 	let open = false;
 	const toggle = () => (open = !open);
 	let modalOne = false;
 
 	const toggle2 = () => (modalOne = !modalOne);
+
+	interface ICompany {
+		nombre_organizacion: string;
+		logo_organizacion: string;
+		sitio_web: string;
+		correo_electronico: string;
+		telefono_organizacion: string;
+		habilitado: boolean;
+		activo: boolean;
+	}
+
+	let company: ICompany = {
+		activo: undefined,
+		correo_electronico: undefined,
+		habilitado: undefined,
+		logo_organizacion: undefined,
+		nombre_organizacion: undefined,
+		sitio_web: undefined,
+		telefono_organizacion: undefined
+	};
+
+	$: console.log(company);
 </script>
 
 <Navbar class="shadow-soft" color="primary" light expand="md">
@@ -423,18 +446,33 @@
 		</CardHeader>
 		<CardBody>
 			<According title="Datos Generales" isOpen>
-				<Row cols={{ lg: 6, md: 6, sm: 6 }}>
-					<Col>
-						<Media
-							src="https://images.squarespace-cdn.com/content/v1/5bc5dd89f8135a188f4d62a5/1590495325988-PF8T81Z87JP2TG91MPXM/ke17ZwdGBToddI8pDm48kGw894HDC1PMVLxdU743eRoUqsxRUqqbr1mOJYKfIPR7LoDQ9mXPOjoJoqy81S2I8GRo6ASst2s6pLvNAu_PZdK7vK2GZkm9Jf_XwIPqWfNH-DfCzA-nBWAGnuP-280dKX4X9JS_SRQtXcaYqNbNlJA/A+Beautiful+Loft+Airbnb+in+Tulum+-+The+Nordroom?format=750w"
-							class="card-img-top rounded"
-							alt="Designer desk"
-						/>
+				<Row>
+					<Col xs={6}>
+						{#if !company.logo_organizacion}
+							<div
+								style="left:50%; position:absolute; top:40%; transform:cal(-50%, -50%); font-size:40px"
+							>
+								<Icon name="camera-fill" />
+							</div>
+						{:else}
+							<Media
+								src={company.logo_organizacion}
+								class="card-img-top h-100 w-100 rounded"
+								alt="image company"
+							/>
+						{/if}
 					</Col>
-					<Col>
+					<Col xs={6}>
 						<Form>
 							<FormGroup class="custom-file mb-5">
-								<Input id="idLabel" class="custom-file-label" type="file" placeholder="Busqueda" />
+								<Input
+									id="idLabel"
+									class="custom-file-label"
+									on:input={(e) =>
+										(company.logo_organizacion = URL.createObjectURL(e.target.files[0]))}
+									type="file"
+									placeholder="Busqueda"
+								/>
 								<Label for="idLabel" class="custom-file-label">Logo</Label>
 							</FormGroup>
 
@@ -456,14 +494,14 @@
 							<FormGroup>
 								<Label>Correo Electronico</Label>
 
-								<Input type="text" placeholder="Correo Electronic" />
+								<Input type="text" placeholder="Correo Electronico" />
 							</FormGroup>
 						</Form>
 					</Col>
 				</Row>
 			</According>
 			<CardFooter class="text-right pt-3">
-				<Button class="mr-3 text-danger" color="primary">Cancelar</Button>
+				<Button class="mr-3 text-danger" on:click={toggle2} color="primary">Cancelar</Button>
 				<Button color="primary" class="text-success">Aceptar</Button>
 			</CardFooter>
 		</CardBody>
